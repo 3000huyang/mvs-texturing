@@ -116,11 +116,12 @@ generate_texture_atlases(std::vector<TexturePatch::Ptr> * orig_texture_patches,
     std::size_t remaining_patches = texture_patches.size();
     std::ofstream tty("/dev/tty", std::ios_base::out);
 
-    #pragma omp parallel
-    {
-    #pragma omp single
-    {
+    //#pragma omp parallel
+   // {
+   // #pragma omp single
+   // {
 
+	std::vector< TextureAtlas::Ptr> vecTextureAltlsPtr;
     while (!texture_patches.empty()) {
         unsigned int texture_size = calculate_texture_size(texture_patches);
 
@@ -148,21 +149,26 @@ generate_texture_atlases(std::vector<TexturePatch::Ptr> * orig_texture_patches,
             }
         }
 
-        #pragma omp task
-        texture_atlas->finalize();
+       // #pragma omp task
+       // texture_atlas->finalize();
+       vecTextureAltlsPtr.push_back(texture_atlas);
     }
-
+#pragma omp parallel for
+	for (__int64 i = 0; i < vecTextureAltlsPtr.size(); ++i)
+	{
+		vecTextureAltlsPtr[i]->finalize();
+	}
     std::cout << "\r\tWorking on atlas " << texture_atlases->size()
         << " 100%... done." << std::endl;
     util::WallTimer timer;
     std::cout << "\tFinalizing texture atlases... " << std::flush;
-    #pragma omp taskwait
+   // #pragma omp taskwait
     std::cout << "done. (Took: " << timer.get_elapsed_sec() << "s)" << std::endl;
 
     /* End of single region */
-    }
+   // }
     /* End of parallel region. */
-    }
+   // }
 }
 
 TEX_NAMESPACE_END

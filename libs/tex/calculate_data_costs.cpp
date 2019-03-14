@@ -98,7 +98,7 @@ photometric_outlier_detection(std::vector<FaceProjectionInfo> * infos, Settings 
         /* Compute new number of inliers (all views with a gauss value above a threshold). */
         for (std::size_t row = 0; row < infos->size(); ++row) {
             Eigen::RowVector3d color = mve_to_eigen(infos->at(row).mean_color).cast<double>();
-            double gauss_value = multi_gauss_unnormalized(color, var_mean, covariance_inv);
+            double gauss_value = multi_gauss_unnormalized<double, 3>(color, var_mean, covariance_inv);
             is_inlier[row] = (gauss_value >= gauss_rejection_threshold ? 1 : 0);
         }
         /* Resize Eigen matrix accordingly and fill with new inliers. */
@@ -113,7 +113,7 @@ photometric_outlier_detection(std::vector<FaceProjectionInfo> * infos, Settings 
     covariance_inv *= outlier_removal_factor;
     for (FaceProjectionInfo & info : *infos) {
         Eigen::RowVector3d color = mve_to_eigen(info.mean_color).cast<double>();
-        double gauss_value = multi_gauss_unnormalized(color, var_mean, covariance_inv);
+        double gauss_value = multi_gauss_unnormalized<double, 3>(color, var_mean, covariance_inv);
         assert(0.0 <= gauss_value && gauss_value <= 1.0);
         switch(settings.outlier_removal) {
             case OUTLIER_REMOVAL_NONE: return true;
@@ -150,7 +150,7 @@ calculate_face_projection_infos(mve::TriangleMesh::ConstPtr mesh,
         std::vector<std::pair<std::size_t, FaceProjectionInfo> > projected_face_view_infos;
 
         #pragma omp for schedule(dynamic)
-        for (std::uint16_t j = 0; j < static_cast<std::uint16_t>(num_views); ++j) {
+        for (int j = 0; j < static_cast<int>(num_views); ++j) {
             view_counter.progress<SIMPLE>();
 
             TextureView * texture_view = &texture_views->at(j);
@@ -258,7 +258,7 @@ postprocess_face_infos(Settings const & settings,
     ProgressCounter face_counter("\tPostprocessing face infos",
         face_projection_infos->size());
     #pragma omp parallel for schedule(dynamic)
-    for (std::size_t i = 0; i < face_projection_infos->size(); ++i) {
+    for (__int64 i = 0; i < face_projection_infos->size(); ++i) {
         face_counter.progress<SIMPLE>();
 
         std::vector<FaceProjectionInfo> & infos = face_projection_infos->at(i);

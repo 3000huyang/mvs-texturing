@@ -177,7 +177,7 @@ local_seam_leveling(UniGraph const & graph, mve::TriangleMesh::ConstPtr mesh,
 
     ProgressCounter texture_patch_counter("\tBlending texture patches", texture_patches->size());
     #pragma omp parallel for schedule(dynamic)
-    for (std::size_t i = 0; i < texture_patches->size(); ++i) {
+    for (__int64 i = 0; i < texture_patches->size(); ++i) {
         TexturePatch::Ptr texture_patch = texture_patches->at(i);
         mve::FloatImage::Ptr image = texture_patch->get_image()->duplicate();
 

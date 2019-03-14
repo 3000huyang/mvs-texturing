@@ -23,24 +23,24 @@ TEX_NAMESPACE_BEGIN
 #define MAX_HOLE_PATCH_SIZE 100
 
 template <typename T>
-T clamp_nan_low(T const & v, T const & hi, T const & lo) {
+T clamp_nan_low(T const & v, T const & lo, T const & hi) {
     return (v > lo) ? ((v < hi) ? v : hi) : lo;
 }
 
 template <typename T>
-T clamp_nan_hi(T const & v, T const & hi, T const & lo) {
+T clamp_nan_hi(T const & v, T const & lo, T const & hi) {
     return (v < hi) ? ((v > lo) ? v : lo) : hi;
 }
 
 template <typename T>
-T clamp(T const & v, T const & hi, T const & lo) {
+T clamp(T const & v, T const & lo, T const & hi) {
     return (v < lo) ? lo : ((v > hi) ? hi : v);
 }
 
 void merge_vertex_projection_infos(std::vector<std::vector<VertexProjectionInfo> > * vertex_projection_infos) {
     /* Merge vertex infos within the same texture patch. */
     #pragma omp parallel for
-    for (std::size_t i = 0; i < vertex_projection_infos->size(); ++i) {
+    for (__int64 i = 0; i < vertex_projection_infos->size(); ++i) {
         std::vector<VertexProjectionInfo> & infos = vertex_projection_infos->at(i);
 
         std::map<std::size_t, VertexProjectionInfo> info_map;
@@ -468,7 +468,7 @@ generate_texture_patches(UniGraph const & graph, mve::TriangleMesh::ConstPtr mes
 
     std::cout << "\tRunning... " << std::flush;
     #pragma omp parallel for schedule(dynamic)
-    for (std::size_t i = 0; i < texture_views->size(); ++i) {
+    for (int i = 0; i < texture_views->size(); ++i) {
 
         std::vector<std::vector<std::size_t> > subgraphs;
         int const label = i + 1;
@@ -544,7 +544,7 @@ generate_texture_patches(UniGraph const & graph, mve::TriangleMesh::ConstPtr mes
         graph.get_subgraphs(0, &subgraphs);
 
         #pragma omp parallel for schedule(dynamic)
-        for (std::size_t i = 0; i < subgraphs.size(); ++i) {
+        for (__int64 i = 0; i < subgraphs.size(); ++i) {
             std::vector<std::size_t> const & subgraph = subgraphs[i];
 
             bool success = false;

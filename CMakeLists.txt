@@ -12,7 +12,7 @@ endif()
 
 #Search for TBB library (release build)
 set(CMAKE_BUILD_TYPE_BACKUP ${CMAKE_BUILD_TYPE})
-set(CMAKE_BUILD_TYPE RELEASE)
+#set(CMAKE_BUILD_TYPE RELEASE)
 FIND_PACKAGE(TBB REQUIRED)
 set(CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE_BACKUP})
 
@@ -37,9 +37,10 @@ find_package(JPEG REQUIRED)
 find_package(TIFF REQUIRED)
 
 add_subdirectory(elibs)
+
 include_directories(SYSTEM
     ${CMAKE_SOURCE_DIR}/elibs/rayint/libs
-    ${CMAKE_SOURCE_DIR}/elibs/mve/libs
+    ${CMAKE_SOURCE_DIR}/libs/mve/libs
     ${CMAKE_SOURCE_DIR}/elibs/eigen
     ${CMAKE_SOURCE_DIR}/elibs/mapmap/
     ${CMAKE_SOURCE_DIR}/elibs/mapmap/mapmap

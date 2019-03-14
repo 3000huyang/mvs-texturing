@@ -136,7 +136,7 @@ partition_connected_component(UniGraph * graph, std::size_t label_of_connected_c
         /* Grow regions starting from centroids */
         while (std::any_of(queues.begin(), queues.end(), [](Nodes const & queue){return !queue.empty();})) {
 #pragma omp parallel for
-            for (std::size_t queue_id = 0; queue_id < queues.size(); ++queue_id) {
+            for (__int64 queue_id = 0; queue_id < queues.size(); ++queue_id) {
                 Nodes & old_queue = queues.at(queue_id);
                 std::unordered_set<Node> new_queue;
                 for (Node node : old_queue)
@@ -171,7 +171,7 @@ partition_connected_component(UniGraph * graph, std::size_t label_of_connected_c
 
         /* Shrink regions starting from boundaries to obtain new centroids. */
 #pragma omp parallel for
-        for (std::size_t queue_id = 0; queue_id < queues.size(); ++queue_id) {
+        for (__int64 queue_id = 0; queue_id < queues.size(); ++queue_id) {
             Nodes & old_queue = queues.at(queue_id);
             while (!old_queue.empty()){
                 std::unordered_set<Node> new_queue;
