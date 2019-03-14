@@ -1,3 +1,11 @@
+MVS-Texturing-windows
+
+-------------------------------------------------------------------------------
+Fix some bugs when compile with visual studio 2017 on windows
+Using vcpkg to compile is recommanded.
+MVE lib and MVE_util lib are integrated
+
+
 MVS-Texturing
 --------------------------------------------------------------------------------
 
